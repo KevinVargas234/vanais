@@ -1,0 +1,212 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanais moda y mas</title>
+    <style>
+        .card {
+        width: 380px;
+        height: 520px;
+        background: rgb(0, 0, 0);
+        padding: .4em;
+        border-radius: 6px;
+        display: inline-block;
+        margin: 10px;
+        }
+
+        .card-image {
+        background-color: rgb(236, 236, 236);
+        width: 100%;
+        height: 440px;
+        border-radius: 6px 6px 0 0;
+        }
+
+        .card-image:hover {
+        transform: scale(0.98);
+        }
+
+        
+
+        .heading {
+        font-weight: 600;
+        color: white;
+        padding: 7px;
+        }
+
+        .heading:hover {
+        cursor: pointer;
+        }
+        .author {
+        color: darkcyan;
+        font-weight: 400;
+        font-size: 15px;
+        padding-top: 5px;
+        }
+        
+        label, select{
+            color: white;
+            background-color: black;
+            width: 200px;
+            height: 40px;
+            font-size: 30px;
+            border-radius: 6px;
+        }
+        .filter{
+            display: inline-block;
+            height: 40px;
+            padding: 10px;
+            background-color: black;
+            border-radius: 6px;
+        }
+        h1{
+            font-size: 50px;
+        }
+        body{
+            background-color: cyan;
+        }
+    
+    </style>
+</head>
+<body>
+    <h1>Catalogo de productos Vanais moda y mas</h1>
+    <div id="filter-bar">
+
+            <div class="filter">
+            <label for="modaSelect">tipo</label>
+            <select id="modaSelect" onchange="onModaSelectChange(this)">
+                <option selected value="todo">todo</option>
+                <option value="moda">moda</option>
+                <option value="dotacion">dotacion</option>
+            </select>
+            </div>
+            <div class="filter" style="display: none;" id="dotacionSelectDiv">
+            <label id="dotacionSelectLabel" for="dotacionSelect" style="display: none;">tipo de dotacion</label>
+            <select id="dotacionSelect" style="display: none;" onchange="cargaCatalogo()">
+                <option selected ="todo">todo</option>
+                <option value="empresarial">empresarial</option>
+                <option value="salud">salud</option>
+                <option value="industrial">industrial</option>
+                <option value="escolar">escolar</option>
+            </select>
+            </div>
+        
+            <div class="filter">
+            <label for="genderSelect">genero</label>
+            <select id="genderSelect" onchange="cargaCatalogo()">
+                <option selected value="todo">todo</option>
+                <option value="masculina">masculina</option>
+                <option value="femenina">femenina</option>
+            </select>
+            </div>
+        
+
+    </div>
+    <div id="itemsDiv" ></div>
+    <script>
+        function onModaSelectChange(e){
+
+            if(e.value=="dotacion"){
+                document.getElementById("dotacionSelect").style.display="inline-block"
+                document.getElementById("dotacionSelectLabel").style.display="inline-block"
+                document.getElementById("dotacionSelectDiv").style.display="inline-block"
+            }else{
+                document.getElementById("dotacionSelect").style.display="none"
+                document.getElementById("dotacionSelectLabel").style.display="none"
+                document.getElementById("dotacionSelectDiv").style.display="none"
+            }
+            cargaCatalogo()
+        }
+        var db=[{
+                name:"camisa de hombre",
+                type:"moda",
+                gender:"masculina",
+                img:"https://distribucionestextiles.com/tienda/289-large_default/camisa-de-popelina-manga-larga.jpg"
+            
+            },{
+                name:"talego",
+                type:"moda",
+                gender:"femenina",
+                img:"https://www.ryocco.com/cdn/shop/products/RYOCCO_7905_AZULCLARO_2_1024x1024.jpg?v=1695437589"
+            },{
+                name:"camisa",
+                type:"dotacion",
+                gender:"masculina",
+                subType:"empresarial",
+                img:"https://ferrefarbef.com/wp-content/uploads/2023/01/camisa-oxford-500x500-agrofarbef-1.jpg"
+            },{
+                name:"blusa",
+                type:"dotacion",
+                gender:"femenina",
+                subType:"empresarial",
+                img:"https://m.media-amazon.com/images/I/61m4hw+u1gL._AC_SX522_.jpg"
+            },{
+                name:"uniforme cirujia",
+                type:"dotacion",
+                gender:"masculina",
+                subType:"salud",
+                img:"https://i.ebayimg.com/images/g/~WkAAOSw9idaLAtc/s-l1600.jpg"
+            },{
+                name:"uniforme cirujia",
+                type:"dotacion",
+                gender:"femenina",
+                subType:"salud",
+                img:"https://www.batasmemorial.com/wp-content/uploads/2023/09/phpU8c3O4.jpeg"
+            },{
+                name:"braga",
+                type:"dotacion",
+                gender:"masculina",
+                subType:"industrial",
+                img:"https://agrofarbef.com/wp-content/uploads/2023/12/overol-en-drill-azul-1.jpg"
+            },{
+                name:"braga",
+                type:"dotacion",
+                gender:"femenina",
+                subType:"industrial",
+                img:"https://jimclark.com.ve/wp-content/uploads/2023/02/Diseno-sin-titulo-31.png"
+            },{
+                name:"uniforme",
+                type:"dotacion",
+                gender:"masculina",
+                subType:"escolar",
+                img:"https://i.ebayimg.com/images/g/vGAAAOSwVblixwGy/s-l1600.jpg"
+            },{
+                name:"uniforme",
+                type:"dotacion",
+                gender:"femenina",
+                subType:"escolar",
+                img:"https://dotacionesyuniformes.co/wp-content/uploads/2020/07/dotaciones-y-uniformes-cydp-dotacio%CC%81n-nin%CC%83a-jardinera-princesa-gris.jpg"
+            }   
+        ]
+        function cargaCatalogo() {
+            var div=document.getElementById("itemsDiv")
+            var html=""
+            db.filter((e)=>{
+                switch(document.getElementById("modaSelect").value){
+                    case "todo": return true;
+                    case "moda": return e.type=="moda"
+                    case "dotacion": 
+                        if(e.type=="dotacion"){
+                            if(document.getElementById("dotacionSelect").value=="todo")return true;
+                            return e.subType==document.getElementById("dotacionSelect").value
+                        }else return false;
+                    break
+                }
+            }).filter((e)=>{
+                if(document.getElementById("genderSelect").value=="todo")return true;
+                return e.gender==document.getElementById("genderSelect").value
+            }).forEach((e)=>{
+                var type=e.type;
+                if(e.subType){
+                    type+=" "+e.subType
+                }
+                type+=" "+e.gender
+                html+='<div class="card"><img class="card-image" src="'+e.img+'" alt="'+e.name+'"><div class="heading">'+e.name+' <div class="author">'+type+'</div></div></div>'
+                            
+            })
+            div.innerHTML=html
+        }
+        cargaCatalogo()
+    </script>
+
+</body>
+</html>
